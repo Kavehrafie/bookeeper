@@ -44,7 +44,7 @@ class ReferenceController extends Controller
 
         return Inertia::render('Reference/Create', [
             'authors' => $this->authorRepository->asTags(),
-            'publishers' => Publisher::all()->only('title'),
+            'publishers' => Publisher::all()->pluck('title'),
             'types' => config('settings.types'),
             'tags' => Tag::all()->pluck('name')
         ]);
@@ -81,15 +81,15 @@ class ReferenceController extends Controller
             'city' => 'max:250',
             'volume' => 'nullable',
             'issue' => 'nullable',
-            'publisher' => 'nullable|max:250',
-            'authors.*' => 'string|regex:/([^,]+)/',
+            'publisher' => 'required|max:250',
+            'authors.*' => 'required|string|regex:/([^,]+)/',
             'editors.*' => 'string|regex:/([^,]+)/',
             'tags' => 'nullable'
         ]);
 
         $reference = $this->refRepository->create($validated);
 
-        return Redirect::route('references.index')->with('banner', 'The reference is successfully created.');
+        return Redirect::route('references.index')->withFlash(['banner' => 'The reference is successfully created.']);
 
     }
 
@@ -101,7 +101,7 @@ class ReferenceController extends Controller
      */
     public function show($id)
     {
-        //
+       //
     }
 
     /**
@@ -112,7 +112,13 @@ class ReferenceController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Inertia::render('Reference/Edit', [
+            'reference' => $this->refRepository->getById($id, ['publisher']),
+            'authors' => $this->authorRepository->asTags(),
+            'publishers' => Publisher::all()->pluck('title'),
+            'types' => config('settings.types'),
+            'tags' => Tag::all()->pluck('name')
+        ]);
     }
 
     /**
@@ -124,9 +130,34 @@ class ReferenceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:250',
+            'sub_title' => 'nullable|max:250',
+            'pages' => 'nullable|max:250',
+            'year' => 'required|integer',
+            'type' => 'required',
+            'city' => 'max:250',
+            'volume' => 'nullable',
+            'issue' => 'nullable',
+            'publisher' => 'required|max:250',
+            'authors.*' => 'string|regex:/([^,]+)/',
+            'editors.*' => 'string|regex:/([^,]+)/',
+            'translators.*' => 'string|regex:/([^,]+)/',
+            'tags' => 'nullable'
+        ]);
+
+        $reference = $this->refRepository->update($id, $validated);
+
+        return Redirect::route('references.index')->withFlash(['banner' => 'The reference is successfully created.']);
     }
 
+    public function createPublisher()
+    {
+//        Inertia::modal('Partial/CreatePublisherModal');
+//
+//
+//
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -135,6 +166,8 @@ class ReferenceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->refRepository->delete($id);
+
+        return Redirect::back();
     }
 }

@@ -12,7 +12,7 @@
                     :class="{ 'is-active': isActive.bold() }"
                     @click.prevent="commands.bold"
                 >
-                    <icon name="bin"/>
+                    <span class="bold font-mono">B</span>
                 </button>
 
                 <button
@@ -20,7 +20,7 @@
                     :class="{ 'is-active': isActive.italic() }"
                     @click.prevent="commands.italic"
                 >
-                    <icon name="edit"/>
+                    <span class="italic font-mono">I</span>
                 </button>
 
                 <button
@@ -28,14 +28,29 @@
                     :class="{ 'is-active': isActive.blockquote() }"
                     @click.prevent="commands.blockquote"
                 >
-                    <icon name="bin"/>
+                    <span class="font-serif">"</span>
+                </button>
+
+                <button
+                    class="menububble__button"
+                    @click="commands.undo"
+                >
+                    <span class="font-serif text-sm">undo</span>
+                </button>
+
+                <button
+                    class="menububble__button"
+                    @click="commands.redo"
+                >
+                    <span class="font-serif text-sm">redo</span>
                 </button>
 
             </div>
         </editor-menu-bubble>
-        <div class="h-60 overflow-y-auto">
-            <editor-content class="editor__content" :class="getClasses" :editor="editor"/>
-        </div>
+
+        <editor-content class="editor__content shadow overflow-y-auto rounded border border-gray-300 p-2 leading-relaxed"
+                        :class="[getClasses, focused ? 'ring-2 ring-blue-500 ' : '']" :editor="editor"/>
+
     </div>
 </template>
 
@@ -67,13 +82,14 @@ export default {
         Icon,
     },
     props: {
-        init: "",
+        value: "",
         height: {
-            default: "md",
+            default: "lg",
         }
     },
     data() {
         return {
+            focused: false,
             keepInBounds: true,
             editor: new Editor({
                 extensions: [
@@ -93,7 +109,13 @@ export default {
                     new Underline(),
                     new History(),
                 ],
-                content: this.init,
+                content: this.value,
+                onFocus: () => {
+                    this.focused = true
+                },
+                onBlur: () => {
+                  this.focused = false
+                },
                 onUpdate: ({getHTML}) => {
                     const content = getHTML()
                     this.$emit('input', content)
@@ -105,18 +127,14 @@ export default {
         this.editor.destroy()
     },
     mounted() {
-        console.log({
-            sm: 'h-12',
-            md: 'h-24',
-            lg: 'h-48'
-        }[this.height])
+
     },
     computed: {
         getClasses() {
             return [{
                 sm: 'h-12',
                 md: 'h-24',
-                lg: 'h-48'
+                lg: 'h-56'
             }[this.height]]
         },
     }

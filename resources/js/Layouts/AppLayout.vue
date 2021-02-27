@@ -221,19 +221,26 @@
 
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto py-2 min-h-2 px-4 sm:px-6 lg:px-8">
                     <slot name="header"></slot>
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="min-h-screen">
                 <slot></slot>
             </main>
 
+            <footer class="mt-5">
+                <div class="bg-gray-800 flex flex-col pt-5 pb-3 justify-center items-center">
+                    <p class="text-white">PHP version: {{PHP_VERSION}} (<span class="text-gray-100">{{year}}</span>)</p>
+                    <p class="text-white">Laravel version: {{APPLICATION_VERSION}}</p>
+                </div>
+            </footer>
             <!-- Modal Portal -->
             <portal-target name="modal" multiple>
             </portal-target>
+
         </div>
     </div>
 </template>
@@ -261,7 +268,9 @@
                 showingNavigationDropdown: false,
             }
         },
+        mounted() {
 
+            },
         methods: {
             switchToTeam(team) {
                 this.$inertia.put(route('current-team.update'), {
@@ -274,6 +283,18 @@
             logout() {
                 this.$inertia.post(route('logout'));
             },
+        },
+        computed : {
+           APPLICATION_VERSION() {
+               return this.$page.props.APPLICATION_VERSION
+           },
+            PHP_VERSION() {
+               return this.$page.props.PHP_VERSION
+            },
+            year() {
+                let date = new Date();
+                return date.getFullYear()
+            }
         }
     }
 </script>

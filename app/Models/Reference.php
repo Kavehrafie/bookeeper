@@ -9,7 +9,7 @@ use Spatie\Tags\HasTags;
 
 class Reference extends Model
 {
-    use HasFactory, SoftDeletes, HasTags;
+    use HasFactory, SoftDeletes, HasTags, HasOwner;
 
     protected $fillable = [
         'title',
@@ -23,12 +23,8 @@ class Reference extends Model
         'pages'
     ];
 
-    protected $appends = ['authors', 'editors'];
+    protected $appends = ['authors', 'editors', 'translators'];
 
-    public function userables()
-    {
-        return $this->morphToMany(User::class, 'userable');
-    }
 
     public function people()
     {
@@ -52,6 +48,14 @@ class Reference extends Model
     {
         return $this->people()
             ->where('author_reference.role', 'editor')
+            ->get()
+            ->pluck('tag', 'id');
+    }
+
+    public function getTranslatorsAttribute()
+    {
+        return $this->people()
+            ->where('author_reference.role', 'translator')
             ->get()
             ->pluck('tag', 'id');
     }

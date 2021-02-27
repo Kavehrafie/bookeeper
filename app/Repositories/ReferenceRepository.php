@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\Publisher;
 use App\Models\Reference;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class ReferenceRepository implements Repository
 {
@@ -24,9 +25,17 @@ class ReferenceRepository implements Repository
     public function all()
     {
         // TODO: Implement all() method.
-        return $this->model->orderBy('created_at', 'desc')->whereHas('userables', function ($query) {
-            $query->where('id', auth()->id());
-        })->with('publisher')->get();
+        return $this->model->orderBy('created_at', 'desc')
+            ->ownedByCurrentUser()
+            ->with('publisher')
+            ->get();
+    }
+
+    public function list()
+    {
+        return $this->model->orderBy('title', 'desc')
+            ->ownedByCurrentUser()
+            ->get(['id', 'title', 'year']);
     }
 
     public function create(array $data)
@@ -46,39 +55,22 @@ class ReferenceRepository implements Repository
             'publisher'
         ]));
 
+        $people = [];
         if (array_key_exists ('authors', $data)) {
-            $authors = [];
-            foreach ($data['authors'] as $authorStr) {
-                $name = explode(', ', $authorStr);
-
-                $author = $this->authorModel->firstOrCreate([
-                    'first_name' => $name[1],
-                    'last_name' => $name[0]
-                ]);
-
-                $authors[$author->id] = ['role' => 'author'];
-            }
-
-            $reference->people()->attach($authors);
+            $people = ($this->associatePeople($data, 'authors'));
         }
 
         if (array_key_exists('editors', $data)) {
-            $editors = [];
-            foreach ($data['editors'] as $editorStr) {
-                $name = explode(', ', $editorStr);
-
-                $editor = $this->authorModel->firstOrCreate([
-                    'first_name' => $name[1],
-                    'last_name' => $name[0]
-                ]);
-
-                $editors[$editor->id] = ['role' => 'editor'];
-            }
-
-            $reference->people()->attach($editors);
+            $people += ($this->associatePeople($data, 'editors')) ;
         }
 
+        if (array_key_exists('translators', $data)) {
+            $people += ($this->associatePeople($data, 'translators')) ;
+        }
 
+        if (!empty($people)) {
+            $reference->people()->attach($people);
+        }
 
         if (array_key_exists('tags', $data)) {
             $reference->attachTags($data['tags']);
@@ -98,10 +90,81 @@ class ReferenceRepository implements Repository
     public function update($id, array $data)
     {
         // TODO: Implement update() method.
+        //
+        if (array_key_exists('publisher', $data)) {
+            $data['publisher_id'] = Publisher::firstOrCreate([
+                'title' => $data['publisher']
+            ])->id;
+        }
+
+        // Make sure that these fields are not included for the bulk creation
+        $reference = $this->getById($id);
+
+
+        if (!$reference->update(Arr::except($data, [
+            'authors',
+            'translators',
+            'tags',
+            'editors',
+            'publisher'
+        ]))) {
+            dd('something went wrong!');
+        };
+
+        $people = [];
+        if (array_key_exists ('authors', $data)) {
+             $people = ($this->associatePeople($data, 'authors'));
+        }
+
+        if (array_key_exists('editors', $data)) {
+             $people += ($this->associatePeople($data, 'editors')) ;
+        }
+
+        if (array_key_exists('translators', $data)) {
+             $people += ($this->associatePeople($data, 'translators')) ;
+        }
+
+        if (!empty($people)) {
+            $reference->people()->sync($people);
+        }
+
+        if (array_key_exists('tags', $data)) {
+            $reference->attachTags($data['tags']);
+        }
+
+
+        return $reference;
     }
 
     public function delete($id)
     {
         // TODO: Implement delete() method.
+        return $this->model->find($id)->delete();
+    }
+
+    public function getById($id, $with = [])
+    {
+        return $this->model->with($with)->where('id', $id)->firstOrFail();
+    }
+
+    /**
+     * @param $authors
+     * @param array $people
+     * @return array
+     */
+    private function associatePeople($authors, $assoc): array
+    {
+        $people = [];
+        foreach ($authors[$assoc] as $authorStr) {
+            $name = explode(', ', $authorStr);
+
+            $author = $this->authorModel->firstOrCreate([
+                'first_name' => $name[1],
+                'last_name' => $name[0]
+            ]);
+
+            $people[$author->id] = ['role' => Str::singular($assoc)];
+        }
+        return $people;
     }
 }

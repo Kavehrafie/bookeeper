@@ -11,10 +11,10 @@
             v-model="search"
             @input="onChange"
             @focus="$emit('focus')"
-            @blur="$emit('blur')"
+            @blur="isOpen = false, $emit('blur')"
             :placeholder="placeholder"
         />
-        <ul class="h-32 overflow-auto border border-gray-300 absolute z-10 w-full bg-white"
+        <ul class="rounded w-48 overflow-auto max-h-20 border border-gray-300 absolute z-10 bg-white"
             v-show="(results.length && isOpen)">
             <li
                 class="loading"
@@ -111,10 +111,14 @@ export default {
                 this.arrowCounter = this.arrowCounter - 1;
             }
         },
-        onEnter() {
+        onEnter(event) {
+
             this.search = this.results[this.arrowCounter];
             this.isOpen = false;
             this.arrowCounter = -1;
+
+            event.preventDefault()
+            // event.target.nextElementSibling.focus()
         },
         handleClickOutside(evt) {
             if (!this.$el.contains(evt.target)) {

@@ -4,7 +4,7 @@
             <h2>{{header}}</h2>
             <p>{{description}}</p>
         </div>
-        <div class="col-span-8 bg-white rounded shadow-sm">
+        <div class="col-span-8" :class="[transparent ? '' : bgClasses]">
             <slot></slot>
         </div>
     </section>
@@ -14,7 +14,13 @@
 export default {
     props: {
         header: '',
-        description: ''
+        description: '',
+        transparent: false
+    },
+    data() {
+        return {
+            bgClasses: 'bg-white rounded shadow-sm'
+        }
     }
 }
 </script>

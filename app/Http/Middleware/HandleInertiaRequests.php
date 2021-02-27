@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Foundation\Application;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,7 +38,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+            'PHP_VERSION' => PHP_VERSION,
+            'APPLICATION_VERSION' => Application::VERSION
         ]);
     }
 }

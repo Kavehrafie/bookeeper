@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,7 @@ use App\Models\Reference;
 
 class Code extends Model
 {
-    use HasFactory, HasTags, SoftDeletes;
+    use HasFactory, HasTags, SoftDeletes, HasOwner;
 
     protected $fillable = [
         'body',
@@ -21,7 +22,7 @@ class Code extends Model
     ];
 
     protected $casts = [
-        'notes' => 'json'
+        'notes' => 'array'
     ];
 
     protected $appends = ['referenceTitle'];
@@ -37,36 +38,26 @@ class Code extends Model
         return $authors . ' ('. $reference->year . '). ' . $reference->title;
     }
 
-    public function userables()
-    {
-        return $this->morphToMany(User::class, 'userable');
-    }
-
-    public function scopeOwnedByCurrentUser($query)
-    {
-        $query->whereHas('userables', function ($query) {
-            $query->where('id', auth()->id());
-        });
-    }
-
     public function reference()
     {
         return $this->belongsTo(Reference::class);
     }
 
+    public function notes()
+    {
+        return $this->hasMany(Notes::class);
+    }
+
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['tag'] ?? null, function ($query, $tag) {
-            $query->withAnyTags($tag);
+        $query->when($filters['tags'] ?? null, function ($query, $tag) {
+            $query->withAllTags($tag);
+        })->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where('body', 'like', '%'.$search.'%');
+        })->when($filters['references'] ?? null, function ($query, $references) {
+            $query->whereHas('reference', function (Builder $query) use ($references) {
+                $query->whereIn('id', $references);
+            });
         });
-//        $query->when($filters['search'] ?? null, function ($query, $search) {
-//            $query->where('name', 'like', '%'.$search.'%');
-//        })->when($filters['trashed'] ?? null, function ($query, $trashed) {
-//            if ($trashed === 'with') {
-//                $query->withTrashed();
-//            } elseif ($trashed === 'only') {
-//                $query->onlyTrashed();
-//            }
-//        });
     }
 }

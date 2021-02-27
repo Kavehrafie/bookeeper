@@ -50,14 +50,13 @@
 
                 <!--                    <inertia-link :href=">create</inertia-link>-->
             </Section>
-            <Section description="Journal section keeps information about the journal publication." header="Authors">
+            <Section description="Enter tags for future search." header="Tags">
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="tags" value="Tags" />
                     <tag-input id="tags" :search="tags" v-model="form.tags"></tag-input>
                 </div>
             </Section>
         </form>
-
     </AppLayout>
 </template>
 
@@ -88,15 +87,17 @@ export default {
         }
     },
     mounted() {
-        console.log(this.tags)
+
     },
     computed: {
         refOptions() {
             let options = {}
             this.references.forEach(el => {
-                options[el.id] = Object.values(el.authors).reduce((acc, cur) =>  acc + ' & ' + cur) + '. ' + el.years + '. '+ el.title
+                let arr = Object.values(el.authors)
+                if (Array.isArray(arr) && arr.length > 0) {
+                    options[el.id] = arr.reduce((acc, cur) =>  acc + ' & ' + cur) + '. ' + el.year + '. '+ el.title
+                }
             })
-            console.log(options)
             return options
         }
     },

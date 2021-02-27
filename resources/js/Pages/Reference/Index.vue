@@ -2,12 +2,12 @@
     <app-layout>
         <template #header>
             <div class="flex">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold my-auto text-xl text-gray-800 leading-tight">
                     Reference index page
                 </h2>
                 <div class="flex ml-auto mr-0">
                     <!-- create a new code -->
-                    <t-toolbar-button :href.prevent="route('references.create')">Add</t-toolbar-button>
+                    <inertia-link :href="route('references.create')" as="button">Add</inertia-link>
                 </div>
             </div>
         </template>
@@ -37,8 +37,15 @@
                                 <td :class="props.tdClass">
                                     {{ props.row.type }}
                                 </td>
-                                <td :class="props.tdClass">
-                                    <inertia-link :href="route('references.edit',props.row.id)" >Edit</inertia-link>
+                                <td :class="[props.tdClass, 'w-24']">
+                                    <div class="flex text-sm space-x-3">
+                                        <inertia-action-link :href="route('references.edit',props.row.id)">
+                                            <icon name="edit" stroke-width="1.5"></icon>
+                                        </inertia-action-link>
+                                        <inertia-link class="text-indigo-500 hover:text-black transform scale-110 transition duration-100 rounded-full p-1 hover:bg-indigo-200" as="button" method="delete" variant="link" :href="route('references.destroy',props.row.id)" >
+                                           <icon  name="bin" stroke-width="1.5"></icon>
+                                        </inertia-link>
+                                    </div>
                                 </td>
                             </tr>
                         </template>
@@ -51,9 +58,11 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import Icon from "@/Components/Icon";
+import InertiaActionLink from "@/Components/InertiaActionLink";
 
 export default {
-    components: {AppLayout},
+    components: {InertiaActionLink, Icon, AppLayout},
     props: [
         'references'
     ],
@@ -62,9 +71,6 @@ export default {
             tableHeaders: ['Title', 'Authors', 'Year', 'Publisher', 'Type',  'Actions'],
         }
     },
-    mounted() {
-
-    },
     computed: {
         tableData() {
             return this.references.map(el => ({
@@ -72,7 +78,7 @@ export default {
                 title: el.title,
                 publisher: el.publisher ? el.publisher.title : '',
                 type: el.type,
-                authors: Object.values(el.authors).reduce((acc, value, index) =>  (acc + (index > 0 ? ' & ' : '' ) + value )),
+                authors: Object.values(el.authors).reduce((acc, value, index) =>  (acc + (index > 0 ? ' & ' : '' ) + value ), ''),
                 year: el.year,
             }))
         }

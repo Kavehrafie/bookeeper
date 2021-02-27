@@ -45,13 +45,13 @@ export default {
         search: {
             type: Array
         },
-        initTags: {
+        value: {
             type: Array
         }
     },
     data() {
         return {
-            tags: this.initTags ? this.initTags : [],
+            tags: this.value ? this.value : [],
             sliceIndex: 3,
             isFocused: false,
         }

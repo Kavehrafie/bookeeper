@@ -13,6 +13,7 @@
         ></t-select>
 
         <!-- Author -->
+
         <label for="authors">Author(s)</label>
         <tag-input :initTags="['amanda, flex', 'jim, jorge']"></tag-input>
 
