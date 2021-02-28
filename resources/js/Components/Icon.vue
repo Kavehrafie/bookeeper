@@ -116,13 +116,36 @@
     </svg>
 
     <svg v-else-if="name === 'chevron-up'"
+         :height='size + "px"'
          :stroke-width="strokeSize"
-         class="stroke-current"
-         :width='size + "px"' :height='size + "px"'
-         aria-labelledby="chevronUpIconTitle"  fill="none" role="img"
+         :width='size + "px"' aria-labelledby="chevronUpIconTitle"
+         class="stroke-current" fill="none" role="img"
          stroke-linecap="square" stroke-linejoin="miter"
-         viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"><title id="chevronUpIconTitle">Chevron Up</title>
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title id="chevronUpIconTitle">Chevron Up</title>
         <polyline points="6 14 12 8 18 14 18 14"/>
+    </svg>
+
+    <svg v-else-if="name === 'notebook'"
+         :height='size + "px"'
+         :stroke-width="strokeSize"
+         :width='size + "px"' aria-labelledby="notebookIconTitle"
+         class="stroke-current" fill="none" role="img"
+         stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title id="notebookIconTitle">Notebook</title>
+        <path d="M9 8h5"/>
+        <path d="M18 3v18H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12z"/>
+        <path d="M5 19v-1a1 1 0 0 1 1-1h12"/>
+    </svg>
+
+    <svg v-else-if="name === 'news'"
+         :height='size + "px"'
+         :stroke-width="strokeSize"
+         :width='size + "px"' class="stroke-current"
+        aria-labelledby="newsIconTitle" fill="none" role="img"
+          stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+         viewBox="0 0 24 24" width="48px" xmlns="http://www.w3.org/2000/svg"><title id="newsIconTitle">News</title>
+        <path
+            d="M22 5L22 17C22 18.3333333 21.3333333 19 20 19 18.6666667 19 18 18.3333333 18 17L18 5 2 5 2 16C2 18 3 19 5 19 7 19 12 19 20 19M6 14L7 14M11 14L14 14M6 10L14 10"/>
     </svg>
 </template>
 <script>

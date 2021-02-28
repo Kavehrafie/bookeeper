@@ -45,6 +45,11 @@
             }
         },
 
+        mounted() {
+            setTimeout(function () {
+                this.show = false;
+            }, 1000)
+        },
         computed: {
             style() {
                 return this.$page.props.jetstream.flash?.bannerStyle || 'success'

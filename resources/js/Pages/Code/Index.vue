@@ -1,15 +1,17 @@
 <template>
     <app-layout>
-        <template #header>
+        <template #title>
             <div class="flex">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Codes
                 </h2>
-                <div class="flex ml-auto mr-0">
-                    <!-- create a new code -->
-                    <inertia-link :href="route('codes.create')" replace >Add</inertia-link>
-                    <!--                    <t-toolbar-button :href.prevent="route('codes.create')">Add</t-toolbar-button>-->
-                </div>
+            </div>
+        </template>
+        <template #toolbar>
+            <div class="flex ml-auto mr-0">
+                <!-- create a new code -->
+                <inertia-link :href="route('codes.create')" replace >Add</inertia-link>
+                <!--                    <t-toolbar-button :href.prevent="route('codes.create')">Add</t-toolbar-button>-->
             </div>
         </template>
 

@@ -1,14 +1,17 @@
 <template>
     <AppLayout>
-        <template #header>
+        <template #title>
             <div class="flex">
                 <h2 class="font-semibold text-xl my-auto text-gray-800 leading-tight">
                     <span class="text-gray-400">Edit</span>  {{form.title}}
                 </h2>
-                <div class="flex ml-auto mr-0 my-2">
-                    <inertia-link as="button" :href="route('references.update', reference.id)"
-                                  method="put" :data="form" preserve-state>Update</inertia-link>
-                </div>
+
+            </div>
+        </template>
+        <template #title>.
+            <div class="flex ml-auto mr-0 my-2">
+                <inertia-link as="button" :href="route('references.update', reference.id)"
+                              method="put" :data="form" preserve-state>Update</inertia-link>
             </div>
         </template>
 
