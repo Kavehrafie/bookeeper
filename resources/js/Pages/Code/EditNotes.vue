@@ -1,18 +1,17 @@
 <template>
     <app-layout>
-        <template #header>
+        <template #title>
             <div class="flex">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-2xl leading-tight">
                     Edit Notes
                 </h2>
-                <div class="flex ml-auto mr-0">
-                    <!-- create a new code -->
-                    <inertia-link :data="form" :href="route('codes.reviews.update', code.id)" as="button"
-                                  method="put"
-                    >Update
-                    </inertia-link>
-                    <!--                    <t-toolbar-button :href.prevent="route('codes.create')">Add</t-toolbar-button>-->
-                </div>
+            </div>
+        </template>
+        <template #toolbar>
+            <div class="flex justify-end w-full space-x-2">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
+                <t-button @click="$inertia.put(route('codes.reviews.update', code.id), form)" >Update</t-button>
             </div>
         </template>
 
@@ -37,7 +36,7 @@
                             <collapsible :title="element.title">
                                 <template #actions>
                                     <t-button v-if="element.id"
-                                              @click.prevent.stop="$inertia.delete(route('codes.reviews.delete', element.id)), notesEdit.splice(index, 1)">
+                                              @click.prevent.stop="notesEdit.splice(index, 1)">
                                         <Icon name="bin"/></t-button>
                                     <t-button v-else @click.prevent.stop="notesEdit.splice(index, 1)"><Icon name="bin"/></t-button>
                                 </template>
@@ -64,8 +63,8 @@
                     <editor v-model="description"/>
                 </div>
                 <template v-slot:footer>
-                    <div class="flex space-x-2">
-                        <t-button type="button">
+                    <div class="flex justify-end space-x-2">
+                        <t-button type="button" variant="secondary">
                             Cancel
                         </t-button>
                         <t-button type="button" @click.prevent="addANote">

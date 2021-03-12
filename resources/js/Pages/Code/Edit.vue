@@ -1,16 +1,20 @@
 <template>
     <AppLayout>
-        <template #header>
+        <template #title>
             <div class="flex">
-                <h2 class="font-semibold text-xl text-indigo-800 leading-tight">
+                <h2 class="font-semibold text-2xl text-indigo-800 leading-tight">
                     <span class="text-gray-400">Edit</span> Code ID: {{code.id }}
                 </h2>
-                <div class="flex ml-auto mr-0">
-                    <!-- update the code -->
-                    <inertia-link  as="button" :href="route('codes.update', code.id)" method="put" :data="form">Update</inertia-link>
-                </div>
             </div>
         </template>
+        <template #toolbar>
+            <div class="flex justify-end w-full space-x-2">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
+                <t-button @click="$inertia.put(route('codes.update', code.id), form)">Update</t-button>
+            </div>
+        </template>
+
         <form class="max-w-6xl mx-auto">
             <Section description="Enter the passage here." header="Body">
                 <div class="border border-gray-200 px-3 py-4 rounded h-64">
@@ -73,7 +77,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.code)
+
     },
     computed: {
         refOptions() {

@@ -30,7 +30,8 @@ class Code extends Model
     public function getReferenceTitleAttribute()
     {
         $reference = $this->reference;
-        $authors = array_reduce(json_decode(json_encode($reference->authors), true), function($carry, $item){
+        if (empty($reference)) return 'No reference found.';
+        $authors = array_reduce($reference->authors->values()->toArray() ?? [], function($carry, $item){
             $carry .= $item . '  ';
             return $carry;
         });

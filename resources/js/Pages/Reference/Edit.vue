@@ -8,10 +8,11 @@
 
             </div>
         </template>
-        <template #title>.
-            <div class="flex ml-auto mr-0 my-2">
-                <inertia-link as="button" :href="route('references.update', reference.id)"
-                              method="put" :data="form" preserve-state>Update</inertia-link>
+        <template #toolbar>
+            <div class="flex justify-end w-full space-x-2">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('references.index'))" variant="secondary">Cancel</t-button>
+                <t-button @click="$inertia.put(route('references.update', reference.id), form)">Update</t-button>
             </div>
         </template>
 
@@ -93,6 +94,8 @@
                 </div>
             </Section>
             <Section description="The authors, editors and translators" header="Authors">
+
+                <!-- authors -->
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="authors" value="Authors" />
                     <t-rich-select
@@ -124,6 +127,8 @@
                     </t-rich-select>
                     <jet-input-error :message="errors.authors"></jet-input-error>
                 </div>
+
+                <!-- editors -->
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="editors" value="Editors" />
                     <t-rich-select
@@ -155,8 +160,10 @@
                     </t-rich-select>
                     <jet-input-error :message="errors.editors"></jet-input-error>
                 </div>
+
+                <!-- Translators -->
                 <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="editors" value="Editors" />
+                    <jet-label for="editors" value="Translators" />
                     <t-rich-select
                         v-model="form.translators"
                         :options="authors"
@@ -264,8 +271,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.reference)
-
     },
     methods: {
         range(start, end){
@@ -281,19 +286,19 @@ export default {
         },
         createAuthor(value) {
             this.authors.push(value)
-            this.form.authors = value
+            this.form.authors.push(value)
             this.setCitationKey()
         },
         createEditor(value) {
             this.authors.push(value)
-            this.form.editors = value
+            this.form.editors.push(value)
             if (this.form.authors.length === 0 ) {
                 this.setCitationKey()
             }
         },
         createTranslator(value) {
             this.authors.push(value)
-            this.form.translators = value
+            this.form.translators.push(value)
         },
         isNameValidated(value) {
             let arr = value.split(', ')

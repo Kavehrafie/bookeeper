@@ -1,24 +1,28 @@
 <template>
     <div class="grid grid-cols-base" >
-        <header class="bg-gray-100 col-start-2 col-span-1 sticky top-0">
-            <div class="flex justify-between py-2 mx-auto max-w-5xl">
+        <header class="bg-gray-100 col-start-2 col-span-1 z-20">
+            <div class="flex justify-between py-2 mx-auto max-w-7xl">
                 <slot name="title"></slot>
                 <header-content/>
             </div>
-            <div class=" py-2 px-4 mx-auto max-w-5xl">
+        </header>
+
+        <div class="col-start-2 col-span-1 py-2 px-4 sticky top-0 z-10 bg-gray-100 w-full">
+            <div class="max-w-7xl mx-auto">
                 <slot name="toolbar"></slot>
             </div>
-        </header>
+        </div>
+
         <!-- contain -->
         <main class="bg-gray-100 col-start-2 col-span-1 min-h-screen">
-            <div class="px-4 md:px-12">
+            <div class="xl:max-w-7xl mx-auto">
                 <slot></slot>
             </div>
         </main>
 
         <!-- sidebar -->
-        <aside class="col-start-1 col-span-1 row-start-1 row-span-3 bg-gray-100 pr-4 menu-aside
-                    z-10 relative pl-4 shadow transition-all duration-250 ease-in-out"
+        <aside class="col-start-1 col-span-1 row-start-1 row-span-4 bg-gray-100 pr-4 menu-aside
+                    z-30 relative pl-4 shadow transition-all duration-250 ease-in-out"
         >
             <div class="sticky top-0 h-screen flex flex-col divide-y divide-gray-200">
 
@@ -26,20 +30,12 @@
                     <logo/>
                 </div>
 
-
                 <inertia-link class="flex text-purple-700 menu-aside-item py-4 hover:bg-indigo-100"
-                              :href="route('references.index')" :active="route().current('references.index')">
-                    <icon name="notebook" :stroke-width="2" :size="35"/>
-                    <span class="my-auto menu-aside-item__text">References</span>
+                              v-for="(link, index) in links" :key="index"
+                              :href="route(link.route)" :active="route().current(link.route)">
+                    <icon :name="link.icon" :stroke-width="2" :size="35"/>
+                    <span class="my-auto menu-aside-item__text">{{ link.title }}</span>
                 </inertia-link>
-
-
-                <inertia-link class="flex text-purple-700 menu-aside-item py-4 hover:bg-indigo-100"
-                              :href="route('codes.index')" :active="route().current('codes.index')">
-                    <icon name="news" :stroke-width="2" :size="35"/>
-                    <span class="my-auto menu-aside-item__text">Codes</span>
-                </inertia-link>
-
 
                 <div class="flex-auto flex items-end  w-full text-sm">
                     <p class="pb-4 mx-auto">v.0.1</p>
@@ -49,12 +45,15 @@
 
         <jet-banner class="col-span-2"/>
         <!-- footer -->
-        <footer class="col-start-2 row-start-3 border-t border-purple-500">
-            <div class="bg-gray-100 text-blue-800 flex flex-col pt-5 pb-3 justify-center items-center">
-                <p class="">PHP version: {{PHP_VERSION}} (<span class="text-gray-400">{{year}}</span>)</p>
+        <footer class="col-start-2 row-start-4 border-t border-white">
+            <div class="bg-gray-100 text-purple-800 flex flex-col pt-5 pb-3 justify-center items-center">
+                <p class="">PHP version: {{PHP_VERSION}} (<span class="text-black">{{year}}</span>)</p>
                 <p class="">Laravel version: {{APPLICATION_VERSION}}</p>
             </div>
         </footer>
+
+        <portal-target name="modal" multiple>
+        </portal-target>
 <!--        <div class="min-h-screen bg-gray-100">-->
 <!--            <nav class="bg-white border-b border-gray-100">-->
 <!--                &lt;!&ndash; Primary Navigation Menu &ndash;&gt;-->
@@ -316,6 +315,18 @@ export default {
             return {
                 show: false,
                 showingNavigationDropdown: false,
+                links: [
+                    {
+                        title: 'Reference',
+                        route:  'references.index',
+                        icon: 'notebook'
+                    },
+                    {
+                        title: 'Codes',
+                        route: 'codes.index',
+                        icon: 'news'
+                    }
+                ]
             }
         },
         mounted() {

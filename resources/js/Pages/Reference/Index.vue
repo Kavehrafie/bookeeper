@@ -1,17 +1,22 @@
 <template>
     <app-layout>
-        <template #header>
+
+        <!-- header & title -->
+        <template #title>
             <div class="flex">
-                <h2 class="font-semibold my-auto text-xl text-gray-800 leading-tight">
-                    Reference index page
+                <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+                    References
                 </h2>
-                <div class="flex ml-auto mr-0">
-                    <!-- create a new code -->
-                    <inertia-link :href="route('references.create')" as="button">Add</inertia-link>
-                </div>
             </div>
         </template>
 
+        <!-- toolbar actions: Add -->
+        <template #toolbar>
+            <div class="flex justify-end ml-auto mr-0">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('references.create'))">Add</t-button>
+            </div>
+        </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -42,9 +47,9 @@
                                         <inertia-action-link :href="route('references.edit',props.row.id)">
                                             <icon name="edit" stroke-width="1.5"></icon>
                                         </inertia-action-link>
-                                        <inertia-link class="text-indigo-500 hover:text-black transform scale-110 transition duration-100 rounded-full p-1 hover:bg-indigo-200" as="button" method="delete" variant="link" :href="route('references.destroy',props.row.id)" >
-                                           <icon  name="bin" stroke-width="1.5"></icon>
-                                        </inertia-link>
+                                        <button class="text-indigo-500 hover:text-black transform scale-110 transition duration-100 rounded-full p-1 hover:bg-indigo-200" @click="deleteCode(props.row.id)">
+                                            <icon name="bin" stroke-width="1.5" />
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -83,6 +88,12 @@ export default {
             }))
         }
     },
-    methods: {}
+    methods: {
+        deleteCode(id){
+            this.$inertia.delete(route('references.destroy', id), {
+                onBefore: () => confirm('Are you sure you want to delete this code?'),
+            })
+        },
+    }
 }
 </script>

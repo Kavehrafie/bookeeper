@@ -1,20 +1,20 @@
 <template>
     <AppLayout>
-        <template #header>
+        <template #title>
             <div class="flex">
-                <h2 class="font-semibold text-xl my-auto text-gray-800 leading-tight">
-                    Create a new reference
+                <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+                    Create a New Reference
                 </h2>
-                <div class="flex ml-auto mr-0 my-2">
-                    <inertia-link as="button"
-                                  :href="route('references.store')"
-                                  method="post" :data="form"
-                                  preserve-state>
-                        Create
-                    </inertia-link>
-                </div>
             </div>
         </template>
+        <template #toolbar>
+            <div class="flex justify-end w-full space-x-2">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('references.index'))" variant="secondary">Cancel</t-button>
+                <t-button @click="$inertia.post(route('references.store'), form)">Create</t-button>
+            </div>
+        </template>
+
         <form class="max-w-6xl mx-auto pb-10" >
             <Section description="Select the reference type." header="Type">
                 <div class="my-2 mx-4">
@@ -83,12 +83,15 @@
                     <t-input id="pages" name="pages" v-model="form.pages" />
                 </div>
             </Section>
+
+            <!-- authors -->
             <Section description="Enter the authors and editors." header="Authors">
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="authors" value="Authors" />
                     <t-rich-select
                         v-model="form.authors"
                         :options="authors"
+
                         multiple
                     >
                         <template
@@ -115,6 +118,8 @@
                     </t-rich-select>
                     <jet-input-error :message="errors.authors"></jet-input-error>
                 </div>
+
+                <!-- editors -->
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="editors" value="Editors" />
                     <t-rich-select
@@ -146,8 +151,10 @@
                     </t-rich-select>
                     <jet-input-error :message="errors.editors"></jet-input-error>
                 </div>
+
+                <!-- translators -->
                 <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="editors" value="Editors" />
+                    <jet-label for="editors" value="Translators" />
                     <t-rich-select
                         v-model="form.translators"
                         :options="authors"
@@ -249,7 +256,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.publishers)
     },
     methods: {
         range(start, end){
@@ -265,19 +271,19 @@ export default {
         },
         createAuthor(value) {
             this.authors.push(value)
-            this.form.authors = value
+            this.form.authors.push(value)
             this.setCitationKey()
         },
         createEditor(value) {
             this.authors.push(value)
-            this.form.editors = value
+            this.form.editors.push(value)
             if (this.form.authors.length === 0 ) {
                 this.setCitationKey()
             }
         },
         createTranslator(value) {
             this.authors.push(value)
-            this.form.translators = value
+            this.form.translators.push(value)
         },
         isNameValidated(value) {
             let arr = value.split(', ')

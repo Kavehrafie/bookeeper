@@ -8,7 +8,7 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-        './resources/vuetailwind.js',
+        './resources/js/vuetailwind.js',
         'node_modules/vue-tailwind/dist/*.js'
     ],
 

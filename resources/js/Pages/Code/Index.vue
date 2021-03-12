@@ -2,23 +2,16 @@
     <app-layout>
         <template #title>
             <div class="flex">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
                     Codes
                 </h2>
             </div>
         </template>
         <template #toolbar>
-            <div class="flex ml-auto mr-0">
+            <div class="flex space-x-2 ml-auto mr-0">
                 <!-- create a new code -->
-                <inertia-link :href="route('codes.create')" replace >Add</inertia-link>
-                <!--                    <t-toolbar-button :href.prevent="route('codes.create')">Add</t-toolbar-button>-->
-            </div>
-        </template>
-
-
-        <div class="py-8">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex w-full">
+                <t-button @click="$inertia.get(route('codes.create'))">Add</t-button>
+                <div class="flex flex-auto">
                     <div class="w-1/3 ml-auto mr-0 transition-all duration-100" :class="{'w-full': isSearchFocused}" >
                         <t-input class="rounded-r-none" placeholder="Search"
                                  @blur="isSearchFocused = false"
@@ -28,20 +21,28 @@
                               :disabled="!isFilterApplied"
                               @click="resetFilters"
                     >
-                        <icon  strokeSize="2" name="filter"/></t-button>
+                        <icon  strokeSize="2" name="filter"/>
+                    </t-button>
                     <t-button class="rounded-l-none py-0" @click="isFilterMoreOptions = !isFilterMoreOptions">
-                        <icon class="transform duration-100" strokeSize="2" name="chevron-down"/></t-button>
+                        <icon class="transform duration-100" strokeSize="2" name="chevron-down"/>
+                    </t-button>
                 </div>
-                <div class="pt-4" v-show="isFilterMoreOptions">
-                    <t-rich-select
-                        :close-on-select="false"
-                        :options="options"
-                        multiple
-                        placeholder="Select multiple options"
-                        v-model="form.references"
-                    >
-                    </t-rich-select>
-                </div>
+            </div>
+            <div class="pt-4" v-show="isFilterMoreOptions">
+                <t-rich-select
+                    :close-on-select="false"
+                    :options="options"
+                    multiple
+                    placeholder="Select multiple options"
+                    v-model="form.references"
+                >
+                </t-rich-select>
+            </div>
+        </template>
+
+
+        <div class="py-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="mt-6 bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <t-table
                         :data="tableData"
@@ -58,7 +59,7 @@
                                 <td :class="props.tdClass">
                                     <ul class="tag-list w-32 flex space-x-1 justify-start flex-wrap">
                                         <li v-for="tag in props.row.tags" :key="tag" >
-                                            <button class="py-1 underline px-1 text-indigo-500 hover:text-indigo-400 duration-100 transition-color" @click="form.tags.push(tag)">
+                                            <button class="text-sm py-1 underline px-1 text-purple-500 hover:text-purple-800 duration-100 transition-color" @click="form.tags.push(tag)">
                                                 {{ tag }}
                                             </button>
                                         </li>
@@ -82,7 +83,7 @@
                                         <inertia-action-link as="button" :href="route('codes.edit', props.row.id)">
                                             <icon name="edit" stroke-width="1.5" />
                                         </inertia-action-link>
-                                        <button class="text-indigo-500 hover:text-black transform scale-110 transition duration-100 rounded-full p-1 hover:bg-indigo-200" @click="deleteCode(props.row.id)">
+                                        <button class="text-purple-500 hover:text-black transform scale-110 transition duration-100 rounded-full p-1 hover:bg-purple-200" @click="deleteCode(props.row.id)">
                                             <icon name="bin" stroke-width="1.5" />
                                         </button>
                                     </div>

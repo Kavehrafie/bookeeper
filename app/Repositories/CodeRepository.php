@@ -26,6 +26,13 @@ class CodeRepository implements Repository
 
     public function notesSync($id, $fields)
     {
+        $noteIds = collect($fields)->pluck('id')->toArray();
+        foreach (Notes::where('code_id', $id)->get()->pluck('id') as $noteId) {
+            if (!in_array($noteId, $noteIds)){
+                $this->deleteNote($noteId);
+            }
+        }
+        
         foreach ($fields as $field){
             $field['code_id'] = $id;
             if ($field['id']) {

@@ -8,11 +8,12 @@
             @keydown.down="onArrowDown"
             @keydown.up="onArrowUp"
             @keydown.enter="onEnter"
+            @keydown.esc="isOpen = false, $emit('blur')"
             v-model="search"
             @input="onChange"
             @focus="$emit('focus')"
-            @blur="isOpen = false, $emit('blur')"
             :placeholder="placeholder"
+
         />
         <ul class="rounded w-48 overflow-auto max-h-20 border border-gray-300 absolute z-10 bg-white"
             v-show="(results.length && isOpen)">
@@ -21,13 +22,12 @@
                 v-if="isLoading">
                 Loading results...
             </li>
-            <li class="text-left px-3 py-1 cursor-pointer hover:bg-gray-100 transition duration-200"
+            <li class=""
                 v-for="(result, i) in results"
                 :key="i"
-                :class="{ 'is-active bg-gray-100': i === arrowCounter }"
-                @click="setResult(result)"
+                :class="{ 'is-active bg-purple-200': i === arrowCounter }"
             >
-                {{ result }}
+                <button class="text-left w-full px-3 py-1 cursor-pointer hover:bg-gray-100 transition duration-200" @click.stop.prevent="setResult(result)">{{ result }}</button>
             </li>
         </ul>
     </div>
@@ -97,9 +97,9 @@ export default {
                 return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1});
         },
         setResult(result) {
-            this.search = result
+            this.search = result;
             this.isOpen = false;
-            this.$emit('input', result)
+
         },
         onArrowDown() {
             if (this.arrowCounter < this.results.length) {

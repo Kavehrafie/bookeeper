@@ -143,7 +143,7 @@ class CodeController extends Controller
     public function reviewUpdate(Request $request, $id)
     {
         $this->codeRepository->notesSync($id, $request->input('notes'));
-        return back();
+        return redirect()->route('codes.index')->withFlash(['banner' => 'The notes are updated!']);
     }
 
     public function reviewDelete($id)

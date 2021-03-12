@@ -1,16 +1,20 @@
 <template>
     <AppLayout>
-        <template #header>
+        <template #title>
             <div class="flex">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-2xl leading-tight">
                     Create a new Code
                 </h2>
-                <div class="flex ml-auto mr-0">
-                    <!-- create a new code -->
-                    <inertia-link  as="button" :href="route('codes.store')" method="post" :data="form">Create</inertia-link>
-                </div>
             </div>
         </template>
+        <template #toolbar>
+            <div class="flex justify-end w-full space-x-2">
+                <!-- create a new code -->
+                <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
+                <t-button @click="$inertia.post(route('codes.store', code.id), form)">Create</t-button>
+            </div>
+        </template>
+
         <form class="max-w-6xl mx-auto">
             <Section description="Enter the passage here." header="Body">
                 <div class="border border-gray-200 px-3 py-4 rounded h-64">

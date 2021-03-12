@@ -4,8 +4,8 @@
             class="mt-2 flex space-x-1 border border-gray-300 rounded-md shadow-sm"
             :class="{'border-indigo-300 ring ring-indigo-200 ring-opacity-50': isFocused}">
             <div v-for='(tag, index) in inlineTags' :key='tag'
-                 class='inline-flex bg-gray-100 border border-gray-300 rounded-full text-sm h-7 px-1 my-auto first:ml-2'>
-                <button class="mr-2 hover:bg-blue-100 transition duration-100 ease-in rounded-full my-1"
+                 class='inline-flex bg-purple-500 text-white border border-white rounded-full text-sm h-7 px-1 my-auto first:ml-2'>
+                <button :class="['mr-2 hover:bg-purple-400 transition duration-100 ease-in rounded-full my-1', tagClasses]"
                         @click="removeTag(index)">
                     <Icon name="cancel"></Icon>
                 </button>
@@ -24,8 +24,8 @@
         </div>
         <div v-show="otherTags.length" class="flex space-x-1 mt-2">
             <div v-for='(tag, index) in otherTags' :key='tag'
-                 class='inline-flex bg-gray-100 border border-gray-300 rounded-full text-sm py-1 px-1'>
-                <button class="mr-2 hover:bg-blue-100 transition duration-100 ease-in rounded-full"
+                 class='inline-flex bg-purple-500 text-white border border-white rounded-full text-sm py-1 px-1'>
+                <button :class="['mr-2 hover:bg-purple-400 transition duration-100 ease-in rounded-full', tagClasses]"
                         @click="removeTag(index + sliceIndex)">
                     <Icon name="cancel"></Icon>
                 </button>
@@ -47,6 +47,9 @@ export default {
         },
         value: {
             type: Array
+        },
+        tagClasses: {
+            type: String
         }
     },
     data() {
