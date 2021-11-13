@@ -20,6 +20,7 @@
                                 @focus="isFocused = true"
                                 @blur="isFocused = false"
                                 @keydown.delete.native='removeLastTag'
+                                @click='onClick'
             ></autocomplete>
         </div>
         <div v-show="otherTags.length" class="flex space-x-1 mt-2">
@@ -71,6 +72,15 @@ export default {
         }
     },
     methods: {
+        onClick(value) {
+            var val = value.trim()
+            if (val.length > 0 && (this.tags.indexOf(val) === -1)) {
+
+                this.tags.push(val)
+                event.target.value = ''
+            }
+            this.update()
+        },
         addTag(event) {
             event.preventDefault()
             var val = event.target.value.trim()

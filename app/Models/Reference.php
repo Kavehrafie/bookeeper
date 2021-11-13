@@ -13,6 +13,7 @@ class Reference extends Model
 
     protected $fillable = [
         'title',
+        'book_title',
         'year',
         'publisher_id',
         'city',

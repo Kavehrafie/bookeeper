@@ -11,7 +11,7 @@
             <div class="flex justify-end w-full space-x-2">
                 <!-- create a new code -->
                 <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
-                <t-button @click="$inertia.post(route('codes.store', code.id), form)">Create</t-button>
+                <t-button @click="$inertia.post(route('codes.store'), form)">Create</t-button>
             </div>
         </template>
 

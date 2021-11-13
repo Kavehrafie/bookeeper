@@ -132,7 +132,7 @@ class ReferenceController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:250',
-            'sub_title' => 'nullable|max:250',
+            'book_title' => 'nullable|max:250',
             'pages' => 'nullable|max:250',
             'year' => 'required|integer',
             'type' => 'required',

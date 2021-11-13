@@ -29,9 +29,7 @@ use Inertia\Inertia;
 //});
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/', [CodeController::class, 'index'])->name('dashboard');
 
     Route::get('codes/tags/{code}/edit', [CodeController::class, 'editTagsModal'])
         ->name('codes.tags.edit');

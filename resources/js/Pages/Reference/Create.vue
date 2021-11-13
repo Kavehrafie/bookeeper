@@ -37,13 +37,7 @@
                 </div>
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="year" value="Year" />
-                    <t-select
-                        id="year"
-                        name="year"
-                        placeholder="Select an entry year"
-                        :options="years"
-                        v-model="form.year"
-                    ></t-select>
+                    <int-input v-model="form.year" :minlength="4" :maxlength="4" :min="1800" ></int-input>
                 </div>
                 <div class="mt-2 mb-4 mx-4">
                     <text-input label="City" :error="errors.city" v-model="form.city"   />
@@ -222,11 +216,12 @@ import Autocomplete from "@/Components/Autocomplete";
 import TagInput from "@/Components/TagInput";
 import JetInputError from "@/Jetstream/InputError";
 import TextInput from "@/Components/TextInput";
+import IntInput from "@/Components/IntInput";
 
 
 export default {
 
-    components: {TextInput, TagInput, Autocomplete, Section, AppLayout, JetLabel, JetInputError},
+    components: {TextInput, TagInput, Autocomplete, Section, AppLayout, JetLabel, JetInputError, IntInput},
     props: {
         authors: null,
         publishers: null,

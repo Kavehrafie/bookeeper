@@ -37,18 +37,11 @@
                 </div>
                 <div class="mt-2 mb-4 mx-4" v-show="form.type === 'book chapter'">
                     <jet-label for="book_title">Book Title <span class="text-red-500">*</span></jet-label>
-                    <t-input id="book_title" name="book_title" v-model="form.book_title" placeholder="e.g. 1990"  />
+                    <t-input id="book_title" name="book_title" v-model="form.book_title"  />
                 </div>
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="year" value="Year" />
                     <int-input v-model="form.year" :minlength="4" :maxlength="4" :min="1800" ></int-input>
-<!--                    <t-select-->
-<!--                        id="year"-->
-<!--                        name="year"-->
-<!--                        placeholder="Select an entry year"-->
-<!--                        :options="years"-->
-<!--                        v-model="form.year"-->
-<!--                    ></t-select>-->
                 </div>
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="city" value="City" />
@@ -56,9 +49,6 @@
                 </div>
                 <div class="mt-2 mb-4 mx-4">
                     <jet-label for="publisher" value="Publisher" />
-<!--                    <autocomplete  :items="publishers"-->
-<!--                                   v-model="form.publisher"-->
-<!--                    />-->
                     <t-rich-select
                         v-model="form.publisher"
                         :options="publishers"
@@ -254,6 +244,7 @@ export default {
             test: 1900,
             form: {
                 title: this.reference.title,
+                book_title: this.reference.book_title,
                 type: this.reference.type,
                 notes: null,
                 city: this.reference.city,
@@ -271,6 +262,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.reference)
     },
     methods: {
         range(start, end){

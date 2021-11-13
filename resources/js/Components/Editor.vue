@@ -33,6 +33,14 @@
 
                 <button
                     class="menububble__button"
+                    :class="{ 'is-active': isActive.rtl() }"
+                    @click.prevent="commands.rtl"
+                >
+                    <span class="font-serif">rtl</span>
+                </button>
+
+                <button
+                    class="menububble__button"
                     @click="commands.undo"
                 >
                     <span class="font-serif text-sm">undo</span>
@@ -74,6 +82,7 @@ import {
     TodoList,
     Underline,
 } from 'tiptap-extensions'
+import RTL from '@/Components/custom/rtl'
 
 export default {
     components: {
@@ -108,6 +117,7 @@ export default {
                     new Strike(),
                     new Underline(),
                     new History(),
+                    new RTL(),
                 ],
                 content: this.value,
                 onFocus: () => {

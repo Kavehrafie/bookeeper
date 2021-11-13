@@ -97,8 +97,11 @@ export default {
                 return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1});
         },
         setResult(result) {
-            this.search = result;
-            this.isOpen = false;
+
+            this.search = ""
+            this.isOpen = false
+            this.$refs.input.focus()
+            this.$emit('click', result)
 
         },
         onArrowDown() {
