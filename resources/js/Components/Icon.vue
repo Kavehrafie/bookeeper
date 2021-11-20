@@ -140,12 +140,25 @@
     <svg v-else-if="name === 'news'"
          :height='size + "px"'
          :stroke-width="strokeSize"
-         :width='size + "px"' class="stroke-current"
-        aria-labelledby="newsIconTitle" fill="none" role="img"
-          stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+         :width='size + "px"' aria-labelledby="newsIconTitle"
+         class="stroke-current" fill="none" role="img"
+         stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
          viewBox="0 0 24 24" width="48px" xmlns="http://www.w3.org/2000/svg"><title id="newsIconTitle">News</title>
         <path
             d="M22 5L22 17C22 18.3333333 21.3333333 19 20 19 18.6666667 19 18 18.3333333 18 17L18 5 2 5 2 16C2 18 3 19 5 19 7 19 12 19 20 19M6 14L7 14M11 14L14 14M6 10L14 10"/>
+    </svg>
+
+    <svg
+        v-else-if="name === 'folder'"
+        :height='size + "px"'
+        :stroke-width="strokeSize"
+        :width='size + "px"'
+        class="stroke-current" fill="none" role="img"
+        aria-labelledby="folderIconTitle"
+        stroke-linecap="square" stroke-linejoin="miter"
+        viewBox="0 0 24 24" width="48px" xmlns="http://www.w3.org/2000/svg">
+        <title id="folderIconTitle">Folder</title>
+        <path d="M3 5h6l1 2h11v12H3z"/>
     </svg>
 </template>
 <script>

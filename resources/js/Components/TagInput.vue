@@ -1,11 +1,11 @@
 <template>
     <div>
         <div
-            class="mt-2 flex space-x-1 border border-gray-300 rounded-md shadow-sm"
-            :class="{'border-indigo-300 ring ring-indigo-200 ring-opacity-50': isFocused}">
+            class="mt-2 px-2 flex space-x-1 border border-gray-300 rounded shadow-sm bg-white"
+            :class="{'border-indigo-500 ring ring-indigo-500 ring-opacity-25': isFocused}">
             <div v-for='(tag, index) in inlineTags' :key='tag'
-                 class='inline-flex bg-purple-500 text-white border border-white rounded-full text-sm h-7 px-1 my-auto first:ml-2'>
-                <button :class="['mr-2 hover:bg-purple-400 transition duration-100 ease-in rounded-full my-1', tagClasses]"
+                 class='inline-flex bg-indigo-500 text-white border border-white items-center rounded-full text-sm h-7 px-1 my-auto first:ml-2'>
+                <button :class="['mr-2 hover:bg-indigo-400 transition duration-100 ease-in rounded-full my-1', tagClasses]"
                         @click="removeTag(index)">
                     <Icon name="cancel"></Icon>
                 </button>
@@ -23,10 +23,10 @@
                                 @click='onClick'
             ></autocomplete>
         </div>
-        <div v-show="otherTags.length" class="flex space-x-1 mt-2">
+        <div v-show="otherTags.length" class="flex space-x-1 mt-2 my-2">
             <div v-for='(tag, index) in otherTags' :key='tag'
-                 class='inline-flex bg-purple-500 text-white border border-white rounded-full text-sm py-1 px-1'>
-                <button :class="['mr-2 hover:bg-purple-400 transition duration-100 ease-in rounded-full', tagClasses]"
+                 class='inline-flex bg-indigo-500 items-center text-white border border-white rounded-full text-sm py-1 px-1'>
+                <button :class="['mr-2 hover:bg-indigo-400 transition duration-100 ease-in rounded-full', tagClasses]"
                         @click="removeTag(index + sliceIndex)">
                     <Icon name="cancel"></Icon>
                 </button>

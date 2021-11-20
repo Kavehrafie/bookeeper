@@ -44,6 +44,10 @@ class Code extends Model
         return $this->belongsTo(Reference::class);
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
     public function notes()
     {
         return $this->hasMany(Notes::class);
@@ -59,6 +63,8 @@ class Code extends Model
             $query->whereHas('reference', function (Builder $query) use ($references) {
                 $query->whereIn('id', $references);
             });
+        })->when($filters['project'] ?? null, function ($query, $project) {
+
         });
     }
 }

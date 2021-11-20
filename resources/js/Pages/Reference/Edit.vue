@@ -254,7 +254,7 @@ export default {
                 authors: Object.values(this.reference.authors),
                 translators: Object.values(this.reference.translators),
                 editors: Object.values(this.reference.editors),
-                tags: [],
+                tags: this.reference.tags.map(el => el.name.en),
                 journal: this.reference.journal,
                 publisher: this.reference.publisher.title,
                 citation_key: ''
@@ -262,7 +262,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.reference)
+        console.log(this.reference, this.tags)
     },
     methods: {
         range(start, end){

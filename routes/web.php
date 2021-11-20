@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReferenceController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -51,4 +52,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('references.create.modal');
 
     Route::resource('references', ReferenceController::class);
+
+    Route::get('projects/{project}/collection/edit', [ProjectController::class, 'editCollection'])
+        ->name('projects.collection.edit');
+    Route::put('projects/{project}/collection', [ProjectController::class, 'updateCollection'])
+        ->name('projects.collection.update');
+    Route::get('projects/{project}/collection/add', [ProjectController::class, 'showAddToCollection'])
+        ->name('projects.showAddToCollection');
+    Route::post('projects/{project}/collection/add', [ProjectController::class, 'storeAddToCollection'])
+        ->name('projects.storeAddToCollection');
+    Route::put('projects/{project}/collection/{code}', [ProjectController::class, 'updateCollection'])
+        ->name('projects.updateCollection');
+    Route::get('projects/{project}/collection/download', [ProjectController::class, 'generateWordFile'])
+        ->name('projects.downloadCollection');
+    Route::delete('projects/{project}/collection/{code}/delete', [ProjectController::class, 'deleteCollection'])
+        ->name('projects.collection.delete');
+    Route::resource('projects', ProjectController::class);
 });

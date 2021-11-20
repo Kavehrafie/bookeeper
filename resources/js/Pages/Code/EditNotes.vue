@@ -10,8 +10,8 @@
         <template #toolbar>
             <div class="flex justify-end w-full space-x-2">
                 <!-- create a new code -->
-                <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
-                <t-button @click="$inertia.put(route('codes.reviews.update', code.id), form)" >Update</t-button>
+                <t-button variant="secondary" @click="$inertia.get(route('codes.index'))">Cancel</t-button>
+                <t-button @click="$inertia.put(route('codes.reviews.update', code.id), form)">Update</t-button>
             </div>
         </template>
 
@@ -32,16 +32,20 @@
                 </div>
                 <div class="mt-2 mb-4 mx-4 rounded overflow-hidden">
                     <draggable v-model="notesEdit" draggable=".item">
-                        <div v-for="(element, index) in notesEdit" :key="index" class="cursor-pointer item border border-b-gray-300">
+                        <div v-for="(element, index) in notesEdit" :key="index"
+                             class="cursor-pointer item border border-b-gray-300">
                             <collapsible :title="element.title">
                                 <template #actions>
                                     <t-button v-if="element.id"
                                               @click.prevent.stop="notesEdit.splice(index, 1)">
-                                        <Icon name="bin"/></t-button>
-                                    <t-button v-else @click.prevent.stop="notesEdit.splice(index, 1)"><Icon name="bin"/></t-button>
+                                        <Icon name="bin"/>
+                                    </t-button>
+                                    <t-button v-else @click.prevent.stop="notesEdit.splice(index, 1)">
+                                        <Icon name="bin"/>
+                                    </t-button>
                                 </template>
                                 <span class="text-sm text-gray-500">
-                                    {{ 'created_at' in element ? element.created_at : ''}}
+                                    {{ 'created_at' in element ? element.created_at : '' }}
                                 </span>
                                 <div v-html="element.description"></div>
                             </collapsible>
@@ -50,30 +54,30 @@
                 </div>
             </section>
         </form>
-        <portal to="modal">
-            <t-modal
-                v-model="isCreateNoteModal"
-                header="Create a new note"
-                variant="large"
-            >
-                <text-input v-model="title" label="Title"></text-input>
 
-                <label class="text-gray-500">Description</label>
-                <div>
-                    <editor v-model="description"/>
+        <t-modal
+            v-model="isCreateNoteModal"
+            header="Create a new note"
+            variant="large"
+        >
+            <text-input v-model="title" label="Title"></text-input>
+
+            <label class="text-gray-500">Description</label>
+            <div>
+                <editor v-model="description"/>
+            </div>
+            <template v-slot:footer>
+                <div class="flex justify-end space-x-2">
+                    <t-button type="button" variant="secondary">
+                        Cancel
+                    </t-button>
+                    <t-button type="button" @click.prevent="addANote">
+                        Create
+                    </t-button>
                 </div>
-                <template v-slot:footer>
-                    <div class="flex justify-end space-x-2">
-                        <t-button type="button" variant="secondary">
-                            Cancel
-                        </t-button>
-                        <t-button type="button" @click.prevent="addANote">
-                            Create
-                        </t-button>
-                    </div>
-                </template>
-            </t-modal>
-        </portal>
+            </template>
+        </t-modal>
+
     </app-layout>
 </template>
 
@@ -93,7 +97,7 @@ export default {
         notes: null
     },
     mounted() {
-        console.log(this.notes)
+
     },
     data() {
         return {
@@ -107,7 +111,7 @@ export default {
     computed: {
         form() {
             return {
-                notes: this.notesEdit.map( (el, i) =>  ({
+                notes: this.notesEdit.map((el, i) => ({
                     id: el.id,
                     title: el.title,
                     description: el.description,
@@ -133,7 +137,7 @@ export default {
             this.description = ""
         },
         closeModal() {
-            this.isCreateNoteModal  = false;
+            this.isCreateNoteModal = false;
         },
     }
 }

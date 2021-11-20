@@ -79,14 +79,13 @@ const settings = {
     't-button': {
         component: TButton,
         props: {
-            fixedClasses: 'block px-4 py-2 transition duration-100 ease-in-out focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed',
-            classes: 'text-white bg-purple-700 border border-transparent shadow-sm rounded-full hover:bg-purple-800',
+            fixedClasses: 'block px-4 py-2 transition duration-100 ease-in-out focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed',
+            classes: 'text-white bg-indigo-500 border border-transparent shadow-sm rounded hover:bg-indigo-600',
             variants: {
-                rounded: 'text-white bg-purple-700 border border-transparent shadow-sm hover:bg-purple-800 rounded',
-                secondary: 'text-gray-800 bg-white border border-gray-300 rounded-full shadow-sm hover:text-gray-600',
+                secondary: 'text-gray-800 bg-white border border-gray-300 shadow-sm hover:text-gray-600',
                 error: 'text-white bg-red-500 border border-transparent rounded shadow-sm hover:bg-red-600',
                 success: 'text-white bg-green-500 border border-transparent rounded shadow-sm hover:bg-green-600',
-                link: 'py-1 text-blue-500 underline hover:text-blue-600'
+                link: 'text-blue-500 underline hover:text-blue-600'
             }
         }
     },
@@ -513,6 +512,9 @@ const settings = {
                 danger: {
                     button: 'bg-red-500 hover:bg-red-600',
                     dropdown: 'bg-red-50'
+                },
+                group:{
+                    dropdown: 'absolute right-0 left-auto w-32 bg-white',
                 }
             }
         }

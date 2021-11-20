@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Publisher;
 use App\Repositories\AuthorRepository;
 use App\Repositories\ReferenceRepository;
@@ -16,8 +15,10 @@ class ReferenceController extends Controller
 {
     protected $refRepository;
 
-    public function __construct(ReferenceRepository $refRepository, AuthorRepository $authorRepository)
-    {
+    public function __construct(
+        ReferenceRepository $refRepository,
+        AuthorRepository $authorRepository
+    ) {
         $this->refRepository = $refRepository;
         $this->authorRepository = $authorRepository;
     }
@@ -29,8 +30,8 @@ class ReferenceController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Reference/Index', [
-            'references' => $this->refRepository->all(),
+        return Inertia::render("Reference/Index", [
+            "references" => $this->refRepository->all(),
         ]);
     }
 
@@ -41,27 +42,12 @@ class ReferenceController extends Controller
      */
     public function create()
     {
-
-        return Inertia::render('Reference/Create', [
-            'authors' => $this->authorRepository->asTags(),
-            'publishers' => Publisher::all()->pluck('title'),
-            'types' => config('settings.types'),
-            'tags' => Tag::all()->pluck('name')
+        return Inertia::render("Reference/Create", [
+            "authors" => $this->authorRepository->asTags(),
+            "publishers" => Publisher::all()->pluck("title"),
+            "types" => config("settings.types"),
+            "tags" => Tag::all()->pluck("name"),
         ]);
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function createModal()
-    {
-
-        Inertia::modal('Reference/CreateModal');
-
-        return back();
     }
 
     /**
@@ -73,24 +59,25 @@ class ReferenceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|max:250',
-            'sub_title' => 'nullable|max:250',
-            'pages' => 'nullable|max:250',
-            'year' => 'required|integer',
-            'type' => 'required',
-            'city' => 'max:250',
-            'volume' => 'nullable',
-            'issue' => 'nullable',
-            'publisher' => 'required|max:250',
-            'authors.*' => 'required|string|regex:/([^,]+)/',
-            'editors.*' => 'string|regex:/([^,]+)/',
-            'tags' => 'nullable'
+            "title" => "required|max:250",
+            "sub_title" => "nullable|max:250",
+            "pages" => "nullable|max:250",
+            "year" => "required|integer",
+            "type" => "required",
+            "city" => "max:250",
+            "volume" => "nullable",
+            "issue" => "nullable",
+            "publisher" => "required|max:250",
+            "authors.*" => "required|string|regex:/([^,]+)/",
+            "editors.*" => "string|regex:/([^,]+)/",
+            "tags" => "nullable",
         ]);
 
         $reference = $this->refRepository->create($validated);
 
-        return Redirect::route('references.index')->withFlash(['banner' => 'The reference is successfully created.']);
-
+        return Redirect::route("references.index")->withFlash([
+            "banner" => "The reference is successfully created.",
+        ]);
     }
 
     /**
@@ -101,7 +88,7 @@ class ReferenceController extends Controller
      */
     public function show($id)
     {
-       //
+        //
     }
 
     /**
@@ -112,12 +99,15 @@ class ReferenceController extends Controller
      */
     public function edit($id)
     {
-        return Inertia::render('Reference/Edit', [
-            'reference' => $this->refRepository->getById($id, ['publisher']),
-            'authors' => $this->authorRepository->asTags(),
-            'publishers' => Publisher::all()->pluck('title'),
-            'types' => config('settings.types'),
-            'tags' => Tag::all()->pluck('name')
+        return Inertia::render("Reference/Edit", [
+            "reference" => $this->refRepository->getById($id, [
+                "publisher",
+                "tags",
+            ]),
+            "authors" => $this->authorRepository->asTags(),
+            "publishers" => Publisher::all()->pluck("title"),
+            "types" => config("settings.types"),
+            "tags" => Tag::all()->pluck("name"),
         ]);
     }
 
@@ -131,32 +121,34 @@ class ReferenceController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'title' => 'required|max:250',
-            'book_title' => 'nullable|max:250',
-            'pages' => 'nullable|max:250',
-            'year' => 'required|integer',
-            'type' => 'required',
-            'city' => 'max:250',
-            'volume' => 'nullable',
-            'issue' => 'nullable',
-            'publisher' => 'required|max:250',
-            'authors.*' => 'string|regex:/([^,]+)/',
-            'editors.*' => 'string|regex:/([^,]+)/',
-            'translators.*' => 'string|regex:/([^,]+)/',
-            'tags' => 'nullable'
+            "title" => "required|max:250",
+            "book_title" => "nullable|max:250",
+            "pages" => "nullable|max:250",
+            "year" => "required|integer",
+            "type" => "required",
+            "city" => "max:250",
+            "volume" => "nullable",
+            "issue" => "nullable",
+            "publisher" => "required|max:250",
+            "authors.*" => "string|regex:/([^,]+)/",
+            "editors.*" => "string|regex:/([^,]+)/",
+            "translators.*" => "string|regex:/([^,]+)/",
+            "tags" => "nullable",
         ]);
 
         $reference = $this->refRepository->update($id, $validated);
 
-        return Redirect::route('references.index')->withFlash(['banner' => 'The reference is successfully created.']);
+        return Redirect::route("references.index")->withFlash([
+            "banner" => "The reference is successfully created.",
+        ]);
     }
 
     public function createPublisher()
     {
-//        Inertia::modal('Partial/CreatePublisherModal');
-//
-//
-//
+        //        Inertia::modal('Partial/CreatePublisherModal');
+        //
+        //
+        //
     }
     /**
      * Remove the specified resource from storage.

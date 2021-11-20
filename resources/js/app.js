@@ -21,10 +21,10 @@ const app = document.getElementById('app');
 InertiaProgress.init({
 
     // The color of the progress bar.
-    color: '#29d',
+    color: '#3edd22',
 
     // Whether the NProgress spinner will be shown.
-    showSpinner: true,
+    showSpinner: false,
 })
 
 new Vue({

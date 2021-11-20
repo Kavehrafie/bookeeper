@@ -32,7 +32,7 @@ class CodeRepository implements Repository
                 $this->deleteNote($noteId);
             }
         }
-        
+
         foreach ($fields as $field){
             $field['code_id'] = $id;
             if ($field['id']) {
@@ -56,9 +56,7 @@ class CodeRepository implements Repository
 
     public function all()
     {
-//        if ($pagination) {
-//            return $this->model->paginate($pagination);
-//        }
+
         $pagination = 40;
         // TODO: Refactor.
         return $this->model->orderBy('created_at', 'desc')

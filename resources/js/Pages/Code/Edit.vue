@@ -1,32 +1,27 @@
 <template>
     <AppLayout>
         <template #title>
-            <div class="flex">
-                <h2 class="font-semibold text-2xl text-indigo-800 leading-tight">
-                    <span class="text-gray-400">Edit</span> Code ID: {{code.id }}
-                </h2>
-            </div>
+            Code ID: {{ code.id }}
         </template>
         <template #toolbar>
             <div class="flex justify-end w-full space-x-2">
                 <!-- create a new code -->
-                <t-button @click="$inertia.get(route('codes.index'))" variant="secondary">Cancel</t-button>
+                <t-button variant="secondary" @click="$inertia.get(route('codes.index'))">Cancel</t-button>
                 <t-button @click="$inertia.put(route('codes.update', code.id), form)">Update</t-button>
             </div>
         </template>
 
         <form class="max-w-6xl mx-auto">
             <Section description="Enter the passage here." header="Body">
-                <div class="border border-gray-200 px-3 py-4 rounded h-64">
-                    <editor v-model="form.body"></editor>
-                </div>
+                <jet-label class="hidden" for="body" value="Passage"></jet-label>
+                <editor v-model="form.body" :autofocus="true"></editor>
             </Section>
 
             <Section description="Select or create a new reference." header="Reference">
 
-                <div class="flex m-4 space-x-4">
+                <div class="flex space-x-4">
                     <div class="w-2/3">
-                        <label class="text-gray-500">Reference</label>
+                        <jet-label for="select" value="Reference"></jet-label>
                         <t-select
                             v-model="form.reference_id"
                             :options="refOptions"
@@ -34,17 +29,15 @@
                             required
                         ></t-select>
                     </div>
-                    <div class="">
-                        <label class="text-gray-500">Page number</label>
-                        <t-input id="pages" autocomplete="pages" v-model="form.pages" type="text"/>
+                    <div class="flex-1">
+                        <jet-label value="Page"/>
+                        <t-input id="pages" v-model="form.pages" autocomplete="pages" type="text"/>
                     </div>
                 </div>
             </Section>
             <Section description="Enter tags for future search." header="Tags">
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="tags" value="Tags" />
-                    <tag-input id="tags" :search="tags" v-model="form.tags"></tag-input>
-                </div>
+                <jet-label for="tags" value="Tags"/>
+                <tag-input id="tags" v-model="form.tags" :search="tags"></tag-input>
             </Section>
         </form>
     </AppLayout>
@@ -81,15 +74,14 @@ export default {
     },
     computed: {
         refOptions() {
-            return this.references.map( el => ({
+            return this.references.map(el => ({
                 value: el.id,
                 text: Object.values(el.authors).reduce(
-                    (acc, cur, index) =>  acc + (index ? '; ' : '' ) + cur, '') + '. ' + el.year + '. '+ el.title
+                    (acc, cur, index) => acc + (index ? '; ' : '') + cur, '') + '. ' + el.year + '. ' + el.title
             }))
         },
     },
-    methods: {
-    }
+    methods: {}
 }
 </script>
 

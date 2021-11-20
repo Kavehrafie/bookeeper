@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         ResponseFactory::macro("modal", function ($modal) {
             inertia()->share(['modal' => $modal]);
         });

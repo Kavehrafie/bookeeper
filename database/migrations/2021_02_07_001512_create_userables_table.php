@@ -13,9 +13,9 @@ class CreateUserablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('userables', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-            $table->nullableMorphs('userable');
+        Schema::create("userables", function (Blueprint $table) {
+            $table->foreignId("user_id")->constrained();
+            $table->nullableMorphs("userable");
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateUserablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('userable');
+        Schema::dropIfExists("userable");
     }
 }

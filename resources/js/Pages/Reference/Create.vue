@@ -1,49 +1,45 @@
 <template>
     <AppLayout>
         <template #title>
-            <div class="flex">
-                <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                    Create a New Reference
-                </h2>
-            </div>
+            Create a New Reference
         </template>
         <template #toolbar>
             <div class="flex justify-end w-full space-x-2">
                 <!-- create a new code -->
-                <t-button @click="$inertia.get(route('references.index'))" variant="secondary">Cancel</t-button>
+                <t-button variant="secondary" @click="$inertia.get(route('references.index'))">Cancel</t-button>
                 <t-button @click="$inertia.post(route('references.store'), form)">Create</t-button>
             </div>
         </template>
 
-        <form class="max-w-6xl mx-auto pb-10" >
+        <form class="max-w-6xl mx-auto pb-10">
             <Section description="Select the reference type." header="Type">
-                <div class="my-2 mx-4">
-                    <jet-label for="type" value="Type" />
-                    <t-select
-                        id="type"
-                        name="type"
-                        placeholder="Select an entry type"
-                        :options="types"
-                        v-model="form.type"
-                    ></t-select>
-                </div>
+                <jet-label for="type" value="Type"/>
+                <t-select
+                    id="type"
+                    v-model="form.type"
+                    :options="types"
+                    name="type"
+                    placeholder="Select an entry type"
+                ></t-select>
             </Section>
             <Section description="Enter the primary fields." header="Primary fields">
-                <div class="mt-2 mb-4 mx-4">
-                    <text-input label="Title" :error="errors.title" v-model="form.title" :required="true" />
+                <text-input v-model="form.title" :error="errors.title" :required="true" label="Title"/>
+
+                <text-input v-show="form.type === 'book chapter'"
+                            v-model="form.book_title"
+                            :error="errors.book_title"
+                            :required="true"
+                            label="Book Title"/>
+
+                <div class="mt-2">
+                    <jet-label for="year" value="Year"/>
+                    <int-input v-model="form.year" :maxlength="4" :min="1800" :minlength="4"></int-input>
                 </div>
-                <div class="mt-2 mb-4 mx-4" v-show="form.type === 'book chapter'">
-                    <text-input label="Book Title" :error="errors.book_title" v-model="form.book_title" :required="true" />
-                </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="year" value="Year" />
-                    <int-input v-model="form.year" :minlength="4" :maxlength="4" :min="1800" ></int-input>
-                </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <text-input label="City" :error="errors.city" v-model="form.city"   />
-                </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="publisher" value="Publisher" />
+
+                <text-input v-model="form.city" :error="errors.city" class="mt-2" label="City"/>
+
+                <div class="mt-2">
+                    <jet-label for="publisher" value="Publisher"/>
                     <t-rich-select
                         v-model="form.publisher"
                         :options="publishers"
@@ -57,8 +53,8 @@
                                 class="text-center"
                             >
                                 <button
-                                    type="button"
                                     class="block w-full p-3 text-white bg-blue-500 border hover:bg-blue-600"
+                                    type="button"
                                     @click="publishers.push(query); form.publisher = query"
                                 >
                                     Create {{ query }}
@@ -66,22 +62,19 @@
                             </div>
                         </template>
                     </t-rich-select>
-                    <jet-input-error :message="errors.publisher" class="mt-2" />
+                    <jet-input-error :message="errors.publisher" class="mt-2"/>
                 </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="volume" value="Volume" />
-                    <t-input id="volume" name="volume" v-model="form.volume" />
-                </div>
-                <div v-show="form.type === 'book chapter'" class="mt-2 mb-4 mx-4">
-                    <jet-label for="pages" value="Pages" />
-                    <t-input id="pages" name="pages" v-model="form.pages" />
-                </div>
+
+                <text-input v-model="form.volume" :error="errors.volume" class="mt-2" label="Volume"/>
+
+                <text-input v-show="form.type === 'book chapter'"
+                            v-model="form.pages" :error="errors.pages" class="mt-2" label="Pages"/>
             </Section>
 
             <!-- authors -->
             <Section description="Enter the authors and editors." header="Authors">
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="authors" value="Authors" />
+                <div class="mt-2">
+                    <jet-label for="authors" value="Authors"/>
                     <t-rich-select
                         v-model="form.authors"
                         :options="authors"
@@ -98,14 +91,15 @@
                             >
                                 <button
                                     v-if="query.split(', ').length === 2"
-                                    type="button"
                                     :class="createListBtnPassedClass"
+                                    type="button"
                                     @click="createAuthor(query)"
                                 >
                                     {{ nameParser(query) }}
                                 </button>
                                 <div v-else class="block w-full p-3 text-white bg-red-500 border">
-                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname, firstname.
+                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname,
+                                    firstname.
                                 </div>
                             </div>
                         </template>
@@ -114,8 +108,8 @@
                 </div>
 
                 <!-- editors -->
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="editors" value="Editors" />
+                <div class="mt-2">
+                    <jet-label for="editors" value="Editors"/>
                     <t-rich-select
                         v-model="form.editors"
                         :options="authors"
@@ -131,14 +125,15 @@
                             >
                                 <button
                                     v-if="query.split(', ').length === 2"
-                                    type="button"
                                     :class="createListBtnPassedClass"
+                                    type="button"
                                     @click="createEditor(query)"
                                 >
                                     {{ nameParser(query) }}
                                 </button>
                                 <div v-else class="block w-full p-3 text-white bg-red-500 border">
-                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname, firstname.
+                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname,
+                                    firstname.
                                 </div>
                             </div>
                         </template>
@@ -147,8 +142,8 @@
                 </div>
 
                 <!-- translators -->
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="editors" value="Translators" />
+                <div class="mt-2">
+                    <jet-label for="editors" value="Translators"/>
                     <t-rich-select
                         v-model="form.translators"
                         :options="authors"
@@ -164,14 +159,15 @@
                             >
                                 <button
                                     v-if="query.split(', ').length === 2"
-                                    type="button"
                                     :class="createListBtnPassedClass"
+                                    type="button"
                                     @click="createTranslator(query)"
                                 >
                                     {{ nameParser(query) }}
                                 </button>
                                 <div v-else class="block w-full p-3 text-white bg-red-500 border">
-                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname, firstname.
+                                    <span class="text-sm">Incorrect input. Follow the pattern:  </span>lastname,
+                                    firstname.
                                 </div>
                             </div>
                         </template>
@@ -179,28 +175,25 @@
                     <jet-input-error :message="errors.translators"></jet-input-error>
                 </div>
             </Section>
-            <Section v-show="form.type === 'article'" description="Journal section keeps information about the journal publication." header="Journal fields">
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="journal" value="Journal" />
-                    <t-input id="journal" name="journal" v-model="form.journal" />
-                </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="issue" value="Issue" />
-                    <t-input id="issue" name="issue"  v-model="form.issue" />
-                </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="pages" value="Pages" />
-                    <t-input id="pages" name="pages" v-model="form.pages" />
-                </div>
+            <Section v-show="form.type === 'article'"
+                     description="Journal section keeps information about the journal publication."
+                     header="Journal fields">
+
+                <text-input v-model="form.journal" :error="errors.journal" class="mt-2" label="Journal"/>
+
+                <text-input v-model="form.issue" :error="errors.issue" class="mt-2" label="Issue"/>
+
+                <text-input v-model="form.pages" :error="errors.pages" class="mt-2" label="Pages"/>
+
             </Section>
             <Section description="This section contains tags and citation key" header="Meta Fields">
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="tags" value="Tags" />
-                    <tag-input id="tags" :search="tags" v-model="form.tags"></tag-input>
+                <div class="mt-2">
+                    <jet-label for="tags" value="Tags"/>
+                    <tag-input id="tags" v-model="form.tags" :search="tags"></tag-input>
                 </div>
-                <div class="mt-2 mb-4 mx-4">
-                    <jet-label for="citation_key" value="Citation key" />
-                    <t-input id="citation_key" name="citation_key" v-model="form.citation_key" />
+                <div class="mt-2">
+                    <jet-label for="citation_key" value="Citation key"/>
+                    <t-input id="citation_key" v-model="form.citation_key" name="citation_key"/>
                 </div>
             </Section>
         </form>
@@ -253,7 +246,7 @@ export default {
     mounted() {
     },
     methods: {
-        range(start, end){
+        range(start, end) {
             return Array.from(Array(end + 1).keys()).slice(start);
         },
         setCitationKey() {
@@ -272,7 +265,7 @@ export default {
         createEditor(value) {
             this.authors.push(value)
             this.form.editors.push(value)
-            if (this.form.authors.length === 0 ) {
+            if (this.form.authors.length === 0) {
                 this.setCitationKey()
             }
         },

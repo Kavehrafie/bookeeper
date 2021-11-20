@@ -56,8 +56,8 @@
             </div>
         </editor-menu-bubble>
 
-        <editor-content class="editor__content shadow overflow-y-auto rounded border border-gray-300 p-2 leading-relaxed"
-                        :class="[getClasses, focused ? 'ring-2 ring-blue-500 ' : '']" :editor="editor"/>
+        <editor-content class="editor__content bg-white shadow overflow-y-auto rounded border border-gray-300 p-2 leading-relaxed"
+                        :class="[getClasses, focused ? 'ring-2 ring-indigo-500 ring-opacity-25 border border-indigo-500' : '']" :editor="editor"/>
 
     </div>
 </template>
@@ -93,12 +93,15 @@ export default {
     props: {
         value: "",
         height: {
-            default: "lg",
+            default: "",
+        },
+        autofocus: {
+            default: false
         }
     },
     data() {
         return {
-            focused: false,
+            focused: this.autofocus,
             keepInBounds: true,
             editor: new Editor({
                 extensions: [
@@ -144,7 +147,8 @@ export default {
             return [{
                 sm: 'h-12',
                 md: 'h-24',
-                lg: 'h-56'
+                lg: 'h-56',
+
             }[this.height]]
         },
     }

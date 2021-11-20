@@ -38,8 +38,25 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
+            'mainMenu' => [
+                [
+                    'title' => 'References',
+                    'value' => 'references.index',
+                    'icon' => 'notebook'
+                ],
+                [
+                    'title' => 'Codes',
+                    'value' => 'codes.index',
+                    'icon' => 'edit'
+                ],
+                [
+                    'title' => 'Projects',
+                    'value' => 'projects.index',
+                    'icon' => 'folder',
+                ]
+            ],
             'PHP_VERSION' => PHP_VERSION,
-            'APPLICATION_VERSION' => Application::VERSION
+            'APPLICATION_VERSION' => Application::VERSION,
         ]);
     }
 }

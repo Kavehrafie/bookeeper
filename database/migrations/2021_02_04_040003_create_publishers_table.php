@@ -13,18 +13,23 @@ class CreatePublishersTable extends Migration
      */
     public function up()
     {
-        Schema::create('publishers', function (Blueprint $table) {
+        Schema::create("publishers", function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string("title");
             $table->timestamps();
         });
 
-        if (Schema::hasTable('references')) {
-            Schema::create('publisher_reference', function (Blueprint $table) {
-
-                $table->foreignId('publisher_id')->constrained()->cascadeOnDelete();
-                $table->foreignId('reference_id')->constrained()->cascadeOnDelete();
-                $table->unique(['publisher_id', 'reference_id']);
+        if (Schema::hasTable("references")) {
+            Schema::create("publisher_reference", function (Blueprint $table) {
+                $table
+                    ->foreignId("publisher_id")
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table
+                    ->foreignId("reference_id")
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table->unique(["publisher_id", "reference_id"]);
             });
         }
     }
@@ -36,7 +41,7 @@ class CreatePublishersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('publisher_reference');
-        Schema::dropIfExists('publishers');
+        Schema::dropIfExists("publisher_reference");
+        Schema::dropIfExists("publishers");
     }
 }

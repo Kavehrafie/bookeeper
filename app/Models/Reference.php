@@ -9,7 +9,7 @@ use Spatie\Tags\HasTags;
 
 class Reference extends Model
 {
-    use HasFactory, SoftDeletes, HasTags, HasOwner;
+    use SoftDeletes, HasTags, HasOwner;
 
     protected $fillable = [
         'title',

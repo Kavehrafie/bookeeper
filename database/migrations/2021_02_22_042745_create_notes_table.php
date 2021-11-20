@@ -13,12 +13,15 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create("notes", function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->integer('order');
-            $table->foreignId('code_id')->constrained()->cascadeOnDelete();
+            $table->string("title");
+            $table->text("description");
+            $table->integer("order");
+            $table
+                ->foreignId("code_id")
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists("notes");
     }
 }

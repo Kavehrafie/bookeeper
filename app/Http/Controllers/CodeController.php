@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Notes;
+use App\Models\Project;
 use App\Repositories\CodeRepository;
 use App\Repositories\ReferenceRepository;
 use Illuminate\Http\Request;
@@ -21,8 +21,10 @@ class CodeController extends Controller
      */
     private $modalId;
 
-    public function __construct(CodeRepository $codeRepository, ReferenceRepository $referenceRepository)
-    {
+    public function __construct(
+        CodeRepository $codeRepository,
+        ReferenceRepository $referenceRepository
+    ) {
         $this->codeRepository = $codeRepository;
         $this->referenceRepository = $referenceRepository;
         $this->modalId = 0;
@@ -35,19 +37,18 @@ class CodeController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Code/Index', [
-            'codes' => $this->codeRepository->all(),
-            'references' => $this->referenceRepository->list(),
-            'filters' => $request->all('tags', 'references', 'search'),
-            'current_id' => $this->modalId
+        return Inertia::render("Code/Index", [
+            "codes" => $this->codeRepository->all(),
+            "projects" => Project::orderBy("title")->get(),
+            "references" => $this->referenceRepository->list(),
+            "filters" => $request->all("tags", "references", "search"),
+            "current_id" => $this->modalId,
         ]);
     }
 
     public function createModal()
     {
-//        inertia()->modal();
-//        Inertia::modal('??');
-        inertia()->modal('Code/CreateModal');
+        inertia()->modal("Code/CreateModal");
 
         return $this->index();
     }
@@ -59,23 +60,23 @@ class CodeController extends Controller
      */
     public function create($oldForm = null)
     {
-        return Inertia::render('Code/Create', [
-            'references' => $this->referenceRepository->all(),
-            'tags' => Tag::all()->pluck('name'),
-            'oldForm' => $oldForm
+        return Inertia::render("Code/Create", [
+            "references" => $this->referenceRepository->all(),
+            "tags" => Tag::all()->pluck("name"),
+            "oldForm" => $oldForm,
         ]);
     }
 
     public function createReferenceModal(Request $request)
     {
-        inertia()->modal('Reference/CreateModal');
+        inertia()->modal("Reference/CreateModal");
 
         return $this->create($request->all());
     }
 
     public function editTagsModal(Request $request, $id)
     {
-        inertia()->modal('Reference/TagsEdit');
+        inertia()->modal("Reference/TagsEdit");
         $this->modalId = $id;
         return $this->index($request);
     }
@@ -88,15 +89,17 @@ class CodeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'body' => 'required',
-            'reference_id' => 'required',
-            'pages' => 'nullable',
-            'tags' => 'nullable'
+            "body" => "required",
+            "reference_id" => "required",
+            "pages" => "nullable",
+            "tags" => "nullable",
         ]);
 
         $this->codeRepository->create($validated);
 
-        return redirect()->route('codes.index')->withFlash(['banner' => 'The code is saved!']);
+        return redirect()
+            ->route("codes.index")
+            ->withFlash(["banner" => "The code is saved!"]);
     }
 
     /**
@@ -118,10 +121,10 @@ class CodeController extends Controller
      */
     public function edit($id)
     {
-        return Inertia::render('Code/Edit', [
-            'code' => $this->codeRepository->getById($id, ['tags']),
-            'references' => $this->referenceRepository->all(),
-            'tags' => Tag::all()->pluck('name'),
+        return Inertia::render("Code/Edit", [
+            "code" => $this->codeRepository->getById($id, ["tags"]),
+            "references" => $this->referenceRepository->all(),
+            "tags" => Tag::all()->pluck("name"),
         ]);
     }
 
@@ -133,17 +136,18 @@ class CodeController extends Controller
      */
     public function reviewEdit($id)
     {
-        return Inertia::render('Code/EditNotes', [
-            'code' => $this->codeRepository->getById($id, ['tags']),
-            'notes' => $this->codeRepository->getNotes($id),
+        return Inertia::render("Code/EditNotes", [
+            "code" => $this->codeRepository->getById($id, ["tags"]),
+            "notes" => $this->codeRepository->getNotes($id),
         ]);
-
     }
 
     public function reviewUpdate(Request $request, $id)
     {
-        $this->codeRepository->notesSync($id, $request->input('notes'));
-        return redirect()->route('codes.index')->withFlash(['banner' => 'The notes are updated!']);
+        $this->codeRepository->notesSync($id, $request->input("notes"));
+        return redirect()
+            ->route("codes.index")
+            ->withFlash(["banner" => "The notes are updated!"]);
     }
 
     public function reviewDelete($id)
@@ -161,15 +165,17 @@ class CodeController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'body' => 'required',
-            'reference_id' => 'required',
-            'pages' => 'nullable',
-            'tags' => 'nullable'
+            "body" => "required",
+            "reference_id" => "required",
+            "pages" => "nullable",
+            "tags" => "nullable",
         ]);
 
         $this->codeRepository->update($id, $validated);
 
-        return redirect()->route('codes.index')->withFlash(['banner' => 'The code is updated!']);
+        return redirect()
+            ->route("codes.index")
+            ->withFlash(["banner" => "The code is updated!"]);
     }
 
     /**

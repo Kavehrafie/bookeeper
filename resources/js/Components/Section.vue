@@ -1,10 +1,11 @@
 <template>
-    <section class="grid grid-cols-12 gap-4 pt-5">
-        <div class="col-span-12 md:col-span-4">
-            <h2>{{header}}</h2>
-            <p>{{description}}</p>
+    <section class="mt-2">
+        <div class="pt-2 flex justify-between w-full">
+            <h2 class="text-lg">{{header}}</h2>
+            <p class="text-sm">{{description}}</p>
         </div>
-        <div class="col-span-8" :class="[transparent ? '' : bgClasses]">
+
+        <div class="py-2">
             <slot></slot>
         </div>
     </section>
@@ -17,11 +18,7 @@ export default {
         description: '',
         transparent: false
     },
-    data() {
-        return {
-            bgClasses: 'bg-white rounded shadow-sm'
-        }
-    }
+
 }
 </script>
 
